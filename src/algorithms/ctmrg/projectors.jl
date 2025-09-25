@@ -172,6 +172,7 @@ function compute_projector(enlarged_corners, coordinate, last_space, alg::FullIn
 
     # SVD full-infinite environment
     fullinf = full_infinite_environment(halfinf_left, halfinf_right)
+    normalize!(fullinf)
     svd_alg = svd_algorithm(alg, coordinate)
     U, S, V, info = PEPSKit.tsvd!(fullinf, svd_alg; trunc = alg.trscheme)
 
