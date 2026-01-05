@@ -168,16 +168,13 @@ previous one `S₂`. When the virtual spaces change, this comparison is not dire
 such that both tensors are projected into the smaller space and then subtracted.
 """
 function _singular_value_distance((S₁, S₂))
-    V₁ = space(S₁, 1)
-    V₂ = space(S₂, 1)
-    if V₁ == V₂
-        return norm(S₁ - S₂)
-    else
-        V = infimum(V₁, V₂)
-        e1 = isometry(V₁, V)
-        e2 = isometry(V₂, V)
-        return norm(e1' * S₁ * e1 - e2' * S₂ * e2)
+    n2 = mapreduce(+, intersect(blocksectors(S₁), blocksectors(S₂))) do s
+        v1 = block(S₁, s)
+        v2 = block(S₂, s)
+        d = min(length(v1), length(v2))
+        return dim(s) * norm(v1[begin:d] - v2[begin:d])^2
     end
+    return sqrt(n2)
 end
 
 """
