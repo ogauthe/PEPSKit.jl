@@ -199,7 +199,7 @@ function compute_projector(enlarged_corners, coordinate, last_space, alg::HalfIn
 
     @reset info.truncation_error = info.truncation_error / norm(S) # normalize truncation error
     P_left, P_right = contract_projectors(U, S, V, enlarged_corners...)
-    return (P_left, P_right), (; U, S, V, info...)
+    return (P_left, P_right), (;info.truncation_error, info.condition_number)
 end
 function compute_projector(enlarged_corners, coordinate, last_space, alg::FullInfiniteProjector)
     halfinf_left = half_infinite_environment(enlarged_corners[1], enlarged_corners[2])
@@ -220,7 +220,7 @@ function compute_projector(enlarged_corners, coordinate, last_space, alg::FullIn
 
     @reset info.truncation_error = info.truncation_error / norm(S) # normalize truncation error
     P_left, P_right = contract_projectors(U, S, V, halfinf_left, halfinf_right)
-    return (P_left, P_right), (; U, S, V, info...)
+    return (P_left, P_right), (;info.truncation_error, info.condition_number)
 end
 
 # ==========================================================================================
@@ -313,5 +313,5 @@ function compute_projector(fq, coordinate, last_space, alg::RandomizedProjector)
 
     @reset info.truncation_error = info.truncation_error / norm(S) # normalize truncation error
     P_left, P_right = contract_projectors(U, S, V, fq)
-    return (P_left, P_right), (; U, S, V, info...)
+    return (P_left, P_right), (;info.truncation_error, info.condition_number)
 end
